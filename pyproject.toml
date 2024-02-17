@@ -2,6 +2,14 @@
 build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core"]
 
+[tool.mypy]
+files = ["."]
+plugins = ["pydantic.mypy"]
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
 [tool.poetry]
 authors = ["The Palace Project <info@thepalaceproject.org>"]
 description = "Palace Client Utilities"
@@ -12,6 +20,7 @@ readme = "README.md"
 version = "0"
 
 [tool.poetry.dependencies]
+mypy = "^1.8.0"
 pre-commit = "^3.6.1"
 pydantic = "^2.6.1"
 python = ">=3.10,<4"
