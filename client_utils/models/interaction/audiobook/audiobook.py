@@ -1,0 +1,109 @@
+from __future__ import annotations
+
+import dataclasses
+import sys
+from collections.abc import Generator, Sequence
+from functools import cached_property
+from pathlib import Path
+
+from client_utils.models.api.rwpm_audiobook import Manifest, ToCEntry
+from client_utils.models.interaction.audiobook.audio_segment import (
+    AudioSegment,
+    audio_segments_for_all_toc_entries,
+)
+
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
+
+
+class EnhancedToCEntry(ToCEntry):
+    depth: int
+    duration: int
+    audio_segments: Sequence[AudioSegment]
+    sub_entries: Sequence[EnhancedToCEntry]  # These are our enhanced children.
+
+    @cached_property
+    def total_duration(self):
+        """The duration (in seconds) of this ToCEntry and its children."""
+        return sum(toc.duration for toc in self.enhanced_toc_in_playback_order)
+
+    @property
+    def enhanced_toc_in_playback_order(self) -> Generator[EnhancedToCEntry, None, None]:
+        """Iterator yielding all ToCEntries in the hierarchy, in the order they appear in the manifest."""
+        yield self
+        for child in self.sub_entries:
+            yield from child.enhanced_toc_in_playback_order
+
+
+@dataclasses.dataclass(frozen=True)
+class Audiobook:
+    manifest: Manifest
+
+    @cached_property
+    def segments_by_toc(self) -> dict[str, Sequence[AudioSegment]]:
+        return {
+            toc_segments.toc_entry.href: toc_segments.audio_segments
+            for toc_segments in audio_segments_for_all_toc_entries(
+                all_toc_entries=self.manifest.toc_in_playback_order,
+                all_tracks=self.manifest.reading_order,
+            )
+        }
+
+    @cached_property
+    def enhanced_toc(self) -> Sequence[EnhancedToCEntry]:
+        return self.generate_enhanced_toc(toc=self.manifest.effective_toc)
+
+    def generate_enhanced_toc(
+        self,
+        toc: Sequence[ToCEntry] | None,
+        depth: int = 0,
+    ):
+        """Recursively generate enhanced ToC entries."""
+        return (
+            [
+                EnhancedToCEntry(
+                    depth=depth,
+                    duration=sum(
+                        segment.duration for segment in self.segments_by_toc[entry.href]
+                    ),
+                    audio_segments=self.segments_by_toc[entry.href],
+                    sub_entries=self.generate_enhanced_toc(
+                        toc=entry.children, depth=depth + 1
+                    ),
+                    **entry.dict(),
+                )
+                for entry in toc
+            ]
+            if toc is not None
+            else []
+        )
+
+    @property
+    def toc_in_playback_order(self) -> Generator[ToCEntry, None, None]:
+        """Iterator yielding all ToC entries in the order that they appear in the manifest.
+
+        If there is no `toc` object (or it is empty), we will construct
+        the ToC using the manifest's `readingOrder`.
+        """
+        yield from self.manifest.toc_in_playback_order
+
+    @property
+    def enhanced_toc_in_playback_order(self) -> Generator[EnhancedToCEntry, None, None]:
+        """Iterator yielding all ToC entries in the order that they appear in the manifest.
+
+        If there is no `toc` object (or it is empty), we will construct
+        the ToC using the manifest's `readingOrder`.
+        """
+        for entry in self.enhanced_toc:
+            yield from entry.enhanced_toc_in_playback_order
+
+    @cached_property
+    def total_duration(self):
+        """The duration (in seconds) of this ToCEntry and its children."""
+        return sum(toc.duration for toc in self.enhanced_toc_in_playback_order)
+
+    @classmethod
+    def from_manifest_file(cls, filepath: Path | str) -> Self:
+        return cls(manifest=Manifest.parse_file(filepath))
