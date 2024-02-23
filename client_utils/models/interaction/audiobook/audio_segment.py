@@ -73,7 +73,7 @@ def _toc_track_boundaries(
     )
 
 
-def audio_segment_for_toc_entry(
+def audio_segments_for_toc_entry(
     entry: ToCEntry,
     next_entry: ToCEntry | None,
     tracks: Sequence[AudioTrack],
@@ -129,6 +129,6 @@ def audio_segments_for_all_toc_entries(
             raise ValueError(
                 "The ToC entry cannot be None. It should always be present."
             )
-        yield audio_segment_for_toc_entry(
+        yield audio_segments_for_toc_entry(
             entry=entry, next_entry=next_entry, tracks=all_tracks
         )

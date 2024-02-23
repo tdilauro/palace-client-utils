@@ -10,6 +10,7 @@ from client_utils.models.api.rwpm_audiobook import Manifest, ToCEntry
 from client_utils.models.interaction.audiobook.audio_segment import (
     AudioSegment,
     audio_segments_for_all_toc_entries,
+    audio_segments_for_toc_entry,
 )
 
 if sys.version_info >= (3, 11):
@@ -100,7 +101,21 @@ class Audiobook:
             yield from entry.enhanced_toc_in_playback_order
 
     @cached_property
-    def total_duration(self):
+    def pre_toc_unplayed_audio_segments(self) -> Sequence[AudioSegment]:
+        """Audio segments that precede the first ToC segment and, thus, are not played."""
+        toc_from_first_track = ToCEntry.from_track(track=self.manifest.reading_order[0])
+        first_effective_toc = self.manifest.effective_toc[0]
+        if first_effective_toc.href == toc_from_first_track.href:
+            return []
+
+        return audio_segments_for_toc_entry(
+            entry=toc_from_first_track,
+            next_entry=first_effective_toc,
+            tracks=self.manifest.reading_order,
+        ).audio_segments
+
+    @cached_property
+    def toc_total_duration(self):
         """The duration (in seconds) of this ToCEntry and its children."""
         return sum(toc.duration for toc in self.enhanced_toc_in_playback_order)
 

@@ -40,7 +40,10 @@ def labeled_duration(label, duration: int, duration_label="duration") -> str:
 def print_audio_summary(audiobook: Audiobook) -> None:
     print(
         labeled_duration(
-            f"Total number of tracks: {len(audiobook.manifest.reading_order)}",
+            "Audiobook ToC-based total duration", duration=audiobook.toc_total_duration
+        ),
+        labeled_duration(
+            f"Number of tracks: {len(audiobook.manifest.reading_order)}",
             duration=sum(track.duration for track in audiobook.manifest.reading_order),
         ),
         labeled_duration(
@@ -50,10 +53,17 @@ def print_audio_summary(audiobook: Audiobook) -> None:
                 for toc in audiobook.enhanced_toc_in_playback_order
             ),
         ),
-        labeled_duration("Audiobook total duration", duration=audiobook.total_duration),
         sep="\n",
-        end="\n\n",
     )
+    if segments := audiobook.pre_toc_unplayed_audio_segments:
+        print(
+            labeled_duration(
+                "<*> Unplayed audio segments (before first ToC segment): "
+                f"{len(segments)}",
+                duration=sum(s.duration for s in segments),
+            ),
+        )
+    print("\n")
 
 
 def print_track_summary(audiobook: Audiobook) -> None:
@@ -67,17 +77,35 @@ def print_track_summary(audiobook: Audiobook) -> None:
             for i, track in enumerate(audiobook.manifest.reading_order)
         ],
         sep="\n",
-        end="\n\n",
+        end="\n\n\n",
     )
 
 
 def print_toc_audio_segment_summary(audiobook: Audiobook) -> None:
+    if segments := audiobook.pre_toc_unplayed_audio_segments:
+        print(
+            labeled_duration(
+                "<*> Unplayed audio segments (before first ToC segment):",
+                duration=sum(s.duration for s in segments),
+            ),
+            *[
+                f"""   {
+                    labeled_duration(
+                        f'Track "{s.track.title}" {s.track.href} from {s.start} to {s.end}',
+                        duration=s.duration
+                    )
+                }"""
+                for s in segments
+            ],
+            sep="\n",
+            end="\n\n\n",
+        )
     for i, toc in enumerate(audiobook.enhanced_toc_in_playback_order):
         indent = " " * toc.depth * 2
         print(
             f"""{indent}{labeled_duration(f'ToC Entry #{i} "{toc.title}"', duration=toc.duration)}""",
             labeled_duration(
-                f"{indent}    {toc.href}",
+                f"{indent}          href: {toc.href}",
                 duration=toc.audio_segments[0].start,
                 duration_label="offset",
             ),
@@ -85,13 +113,13 @@ def print_toc_audio_segment_summary(audiobook: Audiobook) -> None:
             *[
                 f"""{indent}   {
                     labeled_duration(
-                        f'Track "{t.track.title}" {t.track.href} from {t.start} to {t.end}',
-                        duration=t.duration
+                        f'Track "{s.track.title}" {s.track.href} from {s.start} to {s.end}',
+                        duration=s.duration
                     )
                 }"""
-                for t in toc.audio_segments
+                for s in toc.audio_segments
             ],
-            sep="\n  ",
+            sep="\n",
             end="\n\n",
         )
 
