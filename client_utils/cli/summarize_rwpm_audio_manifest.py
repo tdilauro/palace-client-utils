@@ -22,9 +22,9 @@ def command(
 ) -> None:
     audiobook = Audiobook.from_manifest_file(manifest_file)
     print(
-        labeled_duration(
+        text_with_time_delta(
             f'Title: "{audiobook.manifest.metadata.title}"',
-            duration=audiobook.manifest.metadata.duration,
+            delta_secs=audiobook.manifest.metadata.duration,
         ),
         end="\n\n",
     )
@@ -33,34 +33,47 @@ def command(
     print_toc_audio_segment_summary(audiobook)
 
 
-def labeled_duration(label, duration: int, duration_label="duration") -> str:
-    return f"{label} - {duration_label}: {duration}s / {seconds_to_hms(duration)}"
+def text_with_time_delta(text: str, delta_secs: int, delta_label="duration") -> str:
+    """Append a time delta in seconds and hours:minutes:seconds to some label text.
+
+    :param text: The label text.
+    :param delta_secs: The duration in seconds.
+    :param delta_label: (Optional) Label characterizing the time delta.
+    :return: The label text with the duration appended.
+    """
+    return f"{text} - {delta_label}: {delta_secs}s / {seconds_to_hms(delta_secs)}"
 
 
 def print_audio_summary(audiobook: Audiobook) -> None:
     print(
-        labeled_duration(
-            "Audiobook ToC-based total duration", duration=audiobook.toc_total_duration
+        text_with_time_delta(
+            "Audiobook ToC-based total duration",
+            delta_secs=audiobook.toc_total_duration,
         ),
-        labeled_duration(
+        text_with_time_delta(
             f"Number of tracks: {len(audiobook.manifest.reading_order)}",
-            duration=sum(track.duration for track in audiobook.manifest.reading_order),
+            delta_secs=sum(
+                track.duration for track in audiobook.manifest.reading_order
+            ),
+            delta_label="total duration",
         ),
-        labeled_duration(
+        text_with_time_delta(
             f"Audio segments: {sum(len(toc.audio_segments) for toc in audiobook.enhanced_toc_in_playback_order)}",
-            duration=sum(
+            delta_secs=sum(
                 sum(seg.duration for seg in toc.audio_segments)
                 for toc in audiobook.enhanced_toc_in_playback_order
             ),
+            delta_label="total duration",
         ),
         sep="\n",
     )
     if segments := audiobook.pre_toc_unplayed_audio_segments:
         print(
-            labeled_duration(
-                "<*> Unplayed audio segments (before first ToC segment): "
+            text_with_time_delta(
+                "<*> Un-played audio segments (before first ToC segment): "
                 f"{len(segments)}",
-                duration=sum(s.duration for s in segments),
+                delta_secs=sum(s.duration for s in segments),
+                delta_label="total duration",
             ),
         )
     print("\n")
@@ -70,9 +83,9 @@ def print_track_summary(audiobook: Audiobook) -> None:
     print(
         "Tracks (from manifest `reading_order`):",
         *[
-            labeled_duration(
+            text_with_time_delta(
                 f'  #{i} "{track.title}" {track.href}',
-                duration=track.duration,
+                delta_secs=track.duration,
             )
             for i, track in enumerate(audiobook.manifest.reading_order)
         ],
@@ -84,15 +97,15 @@ def print_track_summary(audiobook: Audiobook) -> None:
 def print_toc_audio_segment_summary(audiobook: Audiobook) -> None:
     if segments := audiobook.pre_toc_unplayed_audio_segments:
         print(
-            labeled_duration(
-                "<*> Unplayed audio segments (before first ToC segment):",
-                duration=sum(s.duration for s in segments),
+            text_with_time_delta(
+                "<*> Un-played audio segments (before first ToC segment):",
+                delta_secs=sum(s.duration for s in segments),
             ),
             *[
                 f"""   {
-                    labeled_duration(
+                    text_with_time_delta(
                         f'Track "{s.track.title}" {s.track.href} from {s.start} to {s.end}',
-                        duration=s.duration
+                        delta_secs=s.duration
                     )
                 }"""
                 for s in segments
@@ -103,18 +116,24 @@ def print_toc_audio_segment_summary(audiobook: Audiobook) -> None:
     for i, toc in enumerate(audiobook.enhanced_toc_in_playback_order):
         indent = " " * toc.depth * 2
         print(
-            f"""{indent}{labeled_duration(f'ToC Entry #{i} "{toc.title}"', duration=toc.duration)}""",
-            labeled_duration(
+            f"""{indent}{
+                text_with_time_delta(
+                    f'ToC Entry #{i} "{toc.title}"',
+                    delta_secs=toc.duration,
+                    delta_label="total duration",
+                ),
+            }""",
+            text_with_time_delta(
                 f"{indent}          href: {toc.href}",
-                duration=toc.audio_segments[0].start,
-                duration_label="offset",
+                delta_secs=toc.audio_segments[0].start,
+                delta_label="offset",
             ),
             f"{indent}Number of tracks: {len(toc.audio_segments)}",
             *[
                 f"""{indent}   {
-                    labeled_duration(
+                    text_with_time_delta(
                         f'Track "{s.track.title}" {s.track.href} from {s.start} to {s.end}',
-                        duration=s.duration
+                        delta_secs=s.duration
                     )
                 }"""
                 for s in toc.audio_segments

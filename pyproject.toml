@@ -18,7 +18,7 @@ authors = ["The Palace Project <info@thepalaceproject.org>"]
 description = "Palace Client Utilities"
 homepage = "https://thepalaceproject.org"
 license = "Apache-2.0"
-name = "client-utils"
+name = "palace-client-utils"
 packages = [{include = "*", from = "client_utils"}]
 readme = "README.md"
 version = "0"
@@ -34,7 +34,7 @@ mypy = "^1.8.0"
 pre-commit = "^3.6.1"
 
 [tool.poetry.scripts]
-manifest-summary = "client_utils.bin.summarize_rwpm_audio_manifest:app"
+manifest-summary = "client_utils.cli.summarize_rwpm_audio_manifest:app"
 
 [tool.tomlsort]
 ignore_case = true
