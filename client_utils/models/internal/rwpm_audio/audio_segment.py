@@ -1,25 +1,25 @@
 from __future__ import annotations
 
-import dataclasses
 from collections.abc import Generator, Iterable, Sequence
+from dataclasses import dataclass, field
 
 from client_utils.models.api.rwpm_audiobook import AudioTrack, ToCEntry
 from client_utils.utils.iteration import sliding_window
 
 
-@dataclasses.dataclass
+@dataclass
 class AudioSegment:
     track: AudioTrack
     start: int
     end: int
     # Post-init
-    duration: int = dataclasses.field(init=False)
+    duration: int = field(init=False)
 
     def __post_init__(self):
         self.duration = self.end - self.start
 
 
-@dataclasses.dataclass
+@dataclass(frozen=True)
 class ToCTrackBoundaries:
     toc_entry: ToCEntry
     first_track_index: int
@@ -28,7 +28,7 @@ class ToCTrackBoundaries:
     last_track_end_offset: int
 
 
-@dataclasses.dataclass
+@dataclass(frozen=True)
 class ToCAudioSegmentSequence:
     toc_entry: ToCEntry
     audio_segments: Sequence[AudioSegment]
@@ -108,7 +108,7 @@ def audio_segments_for_toc_entry(
 
     # Intermediate audio segments, when present, comprise full tracks.
     intermediate_tracks = tracks[
-        boundaries.first_track_index + 1 : boundaries.last_track_index
+        boundaries.first_track_index + 1 : boundaries.last_track_index  # noqa: E203
     ]
     intermediate_tracks_segments = [
         AudioSegment(track=track, start=0, end=track.duration)

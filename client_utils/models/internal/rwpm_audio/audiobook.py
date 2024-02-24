@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import dataclasses
 import sys
 from collections.abc import Generator, Sequence
+from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
 from client_utils.models.api.rwpm_audiobook import Manifest, ToCEntry
-from client_utils.models.interaction.audiobook.audio_segment import (
+from client_utils.models.internal.rwpm_audio.audio_segment import (
     AudioSegment,
     audio_segments_for_all_toc_entries,
     audio_segments_for_toc_entry,
@@ -38,7 +38,7 @@ class EnhancedToCEntry(ToCEntry):
             yield from child.enhanced_toc_in_playback_order
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclass(frozen=True)
 class Audiobook:
     manifest: Manifest
 

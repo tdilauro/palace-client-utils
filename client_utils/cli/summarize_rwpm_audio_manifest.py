@@ -6,7 +6,7 @@ from pathlib import Path
 
 import typer
 
-from client_utils.models.interaction.audiobook.audiobook import Audiobook
+from client_utils.models.internal.rwpm_audio.audiobook import Audiobook
 from client_utils.utils.datetime import seconds_to_hms
 
 app = typer.Typer()
@@ -121,7 +121,7 @@ def print_toc_audio_segment_summary(audiobook: Audiobook) -> None:
                     f'ToC Entry #{i} "{toc.title}"',
                     delta_secs=toc.duration,
                     delta_label="total duration",
-                ),
+                )
             }""",
             text_with_time_delta(
                 f"{indent}          href: {toc.href}",
