@@ -34,7 +34,7 @@ mypy = "^1.8.0"
 pre-commit = "^3.6.1"
 
 [tool.poetry.scripts]
-manifest-summary = "client_utils.cli.summarize_rwpm_audio_manifest:app"
+audiobook-manifest-summary = "client_utils.cli.summarize_rwpm_audio_manifest:app"
 
 [tool.tomlsort]
 ignore_case = true
