@@ -2,18 +2,39 @@
 build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core"]
 
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+files = ["."]
+plugins = ["pydantic.mypy"]
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
 [tool.poetry]
 authors = ["The Palace Project <info@thepalaceproject.org>"]
 description = "Palace Client Utilities"
 homepage = "https://thepalaceproject.org"
 license = "Apache-2.0"
 name = "palace-client-utils"
+packages = [{include = "*", from = "client_utils"}]
 readme = "README.md"
 version = "0"
 
 [tool.poetry.dependencies]
-pre-commit = "^3.6.1"
+pydantic = "^2.6.1"
 python = ">=3.10,<4"
+typer = "^0.9.0"
+typing_extensions = {version = "^4.9.0", python = "<3.11"}
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.8.0"
+pre-commit = "^3.6.1"
+
+[tool.poetry.scripts]
+audiobook-manifest-summary = "client_utils.cli.summarize_rwpm_audio_manifest:app"
 
 [tool.tomlsort]
 ignore_case = true
