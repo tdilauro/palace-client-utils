@@ -22,7 +22,7 @@ manifest conforming to the [Audiobook Profile](https://github.com/readium/webpub
 
 ### pyenv
 
-[pyenv](https://github.com/pyenv/pyenv) pyenv lets you easily switch between multiple versions of Python. It can be
+[pyenv](https://github.com/pyenv/pyenv) lets you easily switch between multiple versions of Python. It can be
 [installed](https://github.com/pyenv/pyenv-installer) using the command `curl https://pyenv.run | bash`. You can then
 install the version of Python you want to work with.
 
