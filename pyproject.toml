@@ -19,7 +19,7 @@ description = "Palace Client Utilities"
 homepage = "https://thepalaceproject.org"
 license = "Apache-2.0"
 name = "palace-client-utils"
-packages = [{include = "*", from = "client_utils"}]
+packages = [{include = "client_utils"}]
 readme = "README.md"
 version = "0"
 
