@@ -57,7 +57,7 @@ class ManifestMetadata(BaseModel):
     object_type: str = Field(..., alias="@type")
     identifier: str
     title: str
-    author: str
+    author: str | list[str] | None = None
     publisher: str
     published: datetime.datetime
     language: str
