@@ -52,6 +52,11 @@ class AudioTrack(BaseModel):
     duration: int  # in seconds
     bitrate: int | None = None
 
+    # Optional property, initialized after the model is created, if
+    # we have the source file, this is the actual duration as read from the
+    # audio file.
+    actual_duration: float = 0.0
+
 
 class ManifestMetadata(BaseModel):
     object_type: str = Field(..., alias="@type")

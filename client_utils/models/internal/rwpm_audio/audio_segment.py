@@ -12,11 +12,16 @@ class AudioSegment:
     track: AudioTrack
     start: int
     end: int
+
+    end_actual: float = 0.0
+
     # Post-init
     duration: int = field(init=False)
+    actual_duration: float = field(init=False)
 
     def __post_init__(self):
         self.duration = self.end - self.start
+        self.actual_duration = self.end_actual - self.start
 
 
 @dataclass(frozen=True)
@@ -26,6 +31,7 @@ class ToCTrackBoundaries:
     first_track_start_offset: int
     last_track_index: int
     last_track_end_offset: int
+    last_track_end_actual_offset: float
 
 
 @dataclass(frozen=True)
@@ -52,17 +58,20 @@ def _toc_track_boundaries(
         # This is the last ToC entry, so it will use all the rest of the tracks.
         end_track_index = len(all_tracks) - 1
         end_track_offset = all_tracks[end_track_index].duration
+        end_track_actual_offset = all_tracks[end_track_index].actual_duration
     elif entry.track_href == next_entry.track_href or next_entry.track_offset != 0:
         # This entry either starts and ends on the same track or...
         # ... the next entry doesn't start at the very beginning of its first track.
         # Either way, this one ends on the same track on which the next one starts.
         end_track_index = track_index_by_href[next_entry.track_href]
         end_track_offset = next_entry.track_offset
+        end_track_actual_offset = next_entry.track_offset
     else:
         # The next entry starts right at the beginning of a subsequent track.
         # So this entry ends at the end of the track before the starting track the next entry.
         end_track_index = track_index_by_href[next_entry.track_href] - 1
         end_track_offset = all_tracks[end_track_index].duration
+        end_track_actual_offset = all_tracks[end_track_index].actual_duration
 
     return ToCTrackBoundaries(
         toc_entry=entry,
@@ -70,6 +79,7 @@ def _toc_track_boundaries(
         first_track_start_offset=entry.track_offset,
         last_track_index=end_track_index,
         last_track_end_offset=end_track_offset,
+        last_track_end_actual_offset=end_track_actual_offset,
     )
 
 
@@ -92,6 +102,11 @@ def audio_segments_for_toc_entry(
             if boundaries.first_track_index == boundaries.last_track_index
             else first_track.duration
         ),
+        end_actual=(
+            boundaries.last_track_end_actual_offset
+            if boundaries.first_track_index == boundaries.last_track_index
+            else first_track.actual_duration
+        ),
     )
 
     # We populate a last track segment object only if the first and last
@@ -101,6 +116,7 @@ def audio_segments_for_toc_entry(
             track=tracks[boundaries.last_track_index],
             start=0,
             end=boundaries.last_track_end_offset,
+            end_actual=boundaries.last_track_end_actual_offset,
         )
         if boundaries.first_track_index != boundaries.last_track_index
         else None
@@ -111,7 +127,9 @@ def audio_segments_for_toc_entry(
         boundaries.first_track_index + 1 : boundaries.last_track_index  # noqa: E203
     ]
     intermediate_tracks_segments = [
-        AudioSegment(track=track, start=0, end=track.duration)
+        AudioSegment(
+            track=track, start=0, end=track.duration, end_actual=track.actual_duration
+        )
         for track in intermediate_tracks
     ]
     sequence = list(
