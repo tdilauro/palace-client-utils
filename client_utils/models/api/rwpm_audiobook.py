@@ -4,6 +4,7 @@ import datetime
 import sys
 from collections.abc import Generator, Sequence
 from functools import cached_property
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -20,6 +21,9 @@ class ToCEntry(BaseModel):
     # Computed properties.
     track_href: str = ""
     track_offset: int = 0
+
+    # Unique identifier for this ToCEntry.
+    internal_id: UUID = Field(default_factory=uuid4)
 
     @model_validator(mode="after")
     def computed_values(self) -> Self:

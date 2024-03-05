@@ -5,6 +5,7 @@ from collections.abc import Generator, Sequence
 from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
+from uuid import UUID
 
 from mutagen.mp3 import MP3
 
@@ -47,9 +48,9 @@ class Audiobook:
     manifest: Manifest
 
     @cached_property
-    def segments_by_toc(self) -> dict[str, Sequence[AudioSegment]]:
+    def segments_by_toc(self) -> dict[UUID, Sequence[AudioSegment]]:
         return {
-            toc_segments.toc_entry.href: toc_segments.audio_segments
+            toc_segments.toc_entry.internal_id: toc_segments.audio_segments
             for toc_segments in audio_segments_for_all_toc_entries(
                 all_toc_entries=self.manifest.toc_in_playback_order,
                 all_tracks=self.manifest.reading_order,
@@ -71,13 +72,13 @@ class Audiobook:
                 EnhancedToCEntry(
                     depth=depth,
                     duration=sum(
-                        segment.duration for segment in self.segments_by_toc[entry.href]
+                        segment.duration for segment in self.segments_by_toc[entry.internal_id]
                     ),
                     actual_duration=sum(
                         segment.actual_duration
-                        for segment in self.segments_by_toc[entry.href]
+                        for segment in self.segments_by_toc[entry.internal_id]
                     ),
-                    audio_segments=self.segments_by_toc[entry.href],
+                    audio_segments=self.segments_by_toc[entry.internal_id],
                     sub_entries=self.generate_enhanced_toc(
                         toc=entry.children, depth=depth + 1
                     ),
