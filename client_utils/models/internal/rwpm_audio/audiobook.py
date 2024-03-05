@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
+from mutagen.mp3 import MP3
+
 from client_utils.models.api.rwpm_audiobook import Manifest, ToCEntry
 from client_utils.models.internal.rwpm_audio.audio_segment import (
     AudioSegment,
@@ -24,6 +26,8 @@ class EnhancedToCEntry(ToCEntry):
     duration: int
     audio_segments: Sequence[AudioSegment]
     sub_entries: Sequence[EnhancedToCEntry]  # These are our enhanced children.
+
+    actual_duration: float = 0.0
 
     @cached_property
     def total_duration(self):
@@ -68,6 +72,10 @@ class Audiobook:
                     depth=depth,
                     duration=sum(
                         segment.duration for segment in self.segments_by_toc[entry.href]
+                    ),
+                    actual_duration=sum(
+                        segment.actual_duration
+                        for segment in self.segments_by_toc[entry.href]
                     ),
                     audio_segments=self.segments_by_toc[entry.href],
                     sub_entries=self.generate_enhanced_toc(
@@ -119,6 +127,19 @@ class Audiobook:
         """The duration (in seconds) of this ToCEntry and its children."""
         return sum(toc.duration for toc in self.enhanced_toc_in_playback_order)
 
+    @cached_property
+    def toc_actual_total_duration(self):
+        """The duration (in seconds) of this ToCEntry and its children."""
+        return sum(toc.actual_duration for toc in self.enhanced_toc_in_playback_order)
+
     @classmethod
     def from_manifest_file(cls, filepath: Path | str) -> Self:
-        return cls(manifest=Manifest.parse_file(filepath))
+        directory_path = Path(filepath).parent
+        manifest = Manifest.parse_file(filepath)
+        for track in manifest.reading_order:
+            # Try to load the track
+            track_file = directory_path / track.href
+            if track_file.is_file():
+                track.actual_duration = MP3(track_file).info.length  # type: ignore[attr-defined]
+
+        return cls(manifest=manifest)
