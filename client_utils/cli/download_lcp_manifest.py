@@ -16,13 +16,14 @@ from client_utils.models.api.readium_lcp_license_v1 import LCPLicenseDocument
 from client_utils.utils.http.async_client import HTTPXAsyncClient
 from client_utils.utils.http.auth_token import BaseAuthorizationToken, BasicAuthToken
 from client_utils.utils.http.streaming import streaming_fetch_with_progress
+from client_utils.utils.typer import run_typer_app_as_main
 
 STDOUT = 1
 app = typer.Typer()
 
 
 def main() -> None:
-    app(prog_name="download-lcp-audio-manifest")
+    run_typer_app_as_main(app, prog_name="download-lcp-audio-manifest")
 
 
 @app.command()

@@ -2,7 +2,6 @@
 
 import asyncio
 import json
-import traceback
 
 import typer
 
@@ -10,20 +9,16 @@ from client_utils.constants import DEFAULT_REGISTRY_URL
 from client_utils.models.internal.bookshelf import print_bookshelf_summary
 from client_utils.roles.patron import authenticate
 from client_utils.utils.http.async_client import HTTPXAsyncClient
+from client_utils.utils.typer import run_typer_app_as_main
 
-_app = typer.Typer(rich_markup_mode="rich")
+app = typer.Typer(rich_markup_mode="rich")
 
 
 def main():
-    try:
-        _app()
-    except typer.Exit:
-        pass
-    except Exception:
-        traceback.print_exc()
+    run_typer_app_as_main(app)
 
 
-@_app.command(
+@app.command(
     help="Print a patron's bookshelf.",
     epilog="[red]Use options from only one of the three numbered option groups.[/red]",
     no_args_is_help=True,

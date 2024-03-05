@@ -1,7 +1,7 @@
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import Any, TypeVar
 
-from pydantic import Field, HttpUrl
+from pydantic import Field
 
 from client_utils.constants import (
     OPDS_ACQ_OPEN_ACCESS_REL,
@@ -25,7 +25,7 @@ For the purpose of validating an OPDS 2.0 catalog, use the following JSON Schema
 
 
 class OPDS2Link(ApiBaseModel):
-    href: HttpUrl | str
+    href: str
     rel: str | list[str]
     type: str | None = None
     title: str | None = None
