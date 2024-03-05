@@ -9,12 +9,13 @@ import typer
 
 from client_utils.models.internal.rwpm_audio.audiobook import Audiobook
 from client_utils.utils.datetime import seconds_to_hms
+from client_utils.utils.typer import run_typer_app_as_main
 
 app = typer.Typer()
 
 
 def main() -> None:
-    app(prog_name="summarize-manifest")
+    run_typer_app_as_main(app, prog_name="summarize-manifest")
 
 
 @app.command()
@@ -52,9 +53,14 @@ def text_with_time_delta(
 ) -> str:
     """Append a time delta in seconds and hours:minutes:seconds to some label text.
 
+    An optional second delta can be appended to the time delta.
+
     :param text: The label text.
     :param delta_secs: The duration in seconds.
     :param delta_label: (Optional) Label characterizing the time delta.
+    :param delta_suffix: (Optional) Another label characterizing `delta_secs`.
+    :param second_delta: (Optional) second duration in seconds.
+    :param second_delta_suffix: (Optional) Label characterizing `second_delta`.
     :return: The label text with the duration appended.
     """
     delta_suffix = delta_suffix if second_delta else None
