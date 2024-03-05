@@ -62,9 +62,9 @@ class Publisher(ApiBaseModel):
 
 
 class SubjectInfo(ApiBaseModel):
-    scheme: str
     name: str
-    sortAs: str
+    scheme: str | None = None
+    sortAs: str | None = None
 
 
 class Contributor(ApiBaseModel):
@@ -75,13 +75,13 @@ class Contributor(ApiBaseModel):
 class PublicationMetadata(ApiBaseModel):
     type: str = Field(..., alias="@type")
     title: str
-    sortAs: str
     identifier: str
-    language: str
-    modified: str
-    published: str
-    description: str
-    publisher: Publisher
+    sortAs: str | None = None
+    language: str | None = None
+    modified: str | None = None
+    published: str | None = None
+    description: str | None = None
+    publisher: Publisher | None = None
     subject: list[SubjectInfo] = []
     duration: float | None = None
     author: Contributor | list[Contributor] = []
@@ -89,9 +89,9 @@ class PublicationMetadata(ApiBaseModel):
 
 
 class Availability(ApiBaseModel):
-    state: str
-    since: str
-    until: str
+    state: str | None = None
+    since: str | None = None
+    until: str | None = None
 
 
 class IndirectAcquisitionItem(ApiBaseModel):
@@ -99,7 +99,7 @@ class IndirectAcquisitionItem(ApiBaseModel):
 
 
 class Properties(ApiBaseModel):
-    availability: Availability
+    availability: Availability | None = None
     indirectAcquisition: list[IndirectAcquisitionItem] = []
     lcp_hashed_passphrase: str | None = None
 
@@ -113,7 +113,7 @@ class Image(ApiBaseModel):
 class Publication(ApiBaseModel):
     metadata: PublicationMetadata
     links: list[OPDS2Link]
-    images: list[Image]
+    images: list[Image] = []
 
     @property
     def acquisition_links(self):
