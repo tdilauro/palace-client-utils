@@ -22,9 +22,6 @@ class ToCEntry(BaseModel):
     track_href: str = ""
     track_offset: int = 0
 
-    # Unique identifier for this ToCEntry.
-    internal_id: UUID = Field(default_factory=uuid4)
-
     @model_validator(mode="after")
     def computed_values(self) -> Self:
         self.track_href, offset = self.href.split("#t=")
