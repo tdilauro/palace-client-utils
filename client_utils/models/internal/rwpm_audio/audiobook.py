@@ -5,7 +5,6 @@ from collections.abc import Generator, Sequence
 from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
-from uuid import UUID
 
 from mutagen.mp3 import MP3
 
@@ -72,7 +71,8 @@ class Audiobook:
                 EnhancedToCEntry(
                     depth=depth,
                     duration=sum(
-                        segment.duration for segment in self.segments_by_toc_id[id(entry)]
+                        segment.duration
+                        for segment in self.segments_by_toc_id[id(entry)]
                     ),
                     actual_duration=sum(
                         segment.actual_duration

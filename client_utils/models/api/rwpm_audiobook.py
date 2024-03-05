@@ -4,7 +4,6 @@ import datetime
 import sys
 from collections.abc import Generator, Sequence
 from functools import cached_property
-from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator
 
