@@ -11,6 +11,10 @@
 - `audiobook-manifest-summary` (`summarize_rwpm_audio_manifest.py`)
     - Produce a summary description from a [Readium Web Publication Manifest (RWPM)](https://github.com/readium/webpub-manifest)
 manifest conforming to the [Audiobook Profile](https://github.com/readium/webpub-manifest/blob/master/profiles/audiobook.md).
+- `fetch-lcp-audiobook-manifest`
+    - Given an LCP audiobook fulfillment URL, retrieve it and store/print its manifest.
+- `patron-bookshelf`
+    - Print a patron's bookshelf as either a summary or in full as JSON.
 
 ### Library Support
 
