@@ -47,9 +47,9 @@ class Audiobook:
     manifest: Manifest
 
     @cached_property
-    def segments_by_toc(self) -> dict[str, Sequence[AudioSegment]]:
+    def segments_by_toc_id(self) -> dict[int, Sequence[AudioSegment]]:
         return {
-            toc_segments.toc_entry.href: toc_segments.audio_segments
+            id(toc_segments.toc_entry): toc_segments.audio_segments
             for toc_segments in audio_segments_for_all_toc_entries(
                 all_toc_entries=self.manifest.toc_in_playback_order,
                 all_tracks=self.manifest.reading_order,
@@ -71,13 +71,14 @@ class Audiobook:
                 EnhancedToCEntry(
                     depth=depth,
                     duration=sum(
-                        segment.duration for segment in self.segments_by_toc[entry.href]
+                        segment.duration
+                        for segment in self.segments_by_toc_id[id(entry)]
                     ),
                     actual_duration=sum(
                         segment.actual_duration
-                        for segment in self.segments_by_toc[entry.href]
+                        for segment in self.segments_by_toc_id[id(entry)]
                     ),
-                    audio_segments=self.segments_by_toc[entry.href],
+                    audio_segments=self.segments_by_toc_id[id(entry)],
                     sub_entries=self.generate_enhanced_toc(
                         toc=entry.children, depth=depth + 1
                     ),
