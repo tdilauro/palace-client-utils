@@ -42,6 +42,7 @@ types-pytz = "^2024.1.0.20240203"
 audiobook-manifest-summary = "client_utils.cli.summarize_rwpm_audio_manifest:main"
 fetch-lcp-audiobook-manifest = "client_utils.cli.download_lcp_manifest:main"
 patron-bookshelf = "client_utils.cli.patron_bookshelf:main"
+validate-audiobook-manifests = "client_utils.cli.validate_manifests:main"
 
 [tool.tomlsort]
 ignore_case = true

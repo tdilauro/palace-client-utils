@@ -15,6 +15,8 @@ manifest conforming to the [Audiobook Profile](https://github.com/readium/webpub
     - Given an LCP audiobook fulfillment URL, retrieve it and store/print its manifest.
 - `patron-bookshelf`
     - Print a patron's bookshelf as either a summary or in full as JSON.
+- `validate-audiobook-manifests`
+    - Validate a directory of RWPM audiobook manifests printing any errors found.
 
 ### Library Support
 
