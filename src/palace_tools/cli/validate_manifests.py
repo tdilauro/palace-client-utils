@@ -5,10 +5,10 @@ from textwrap import indent
 import typer
 from pydantic import ValidationError
 
-from client_utils.cli.summarize_rwpm_audio_manifest import text_with_time_delta
-from client_utils.models.internal.rwpm_audio.audiobook import Audiobook
-from client_utils.utils.datetime import seconds_to_hms
-from client_utils.utils.typer import run_typer_app_as_main
+from palace_tools.cli.summarize_rwpm_audio_manifest import text_with_time_delta
+from palace_tools.models.internal.rwpm_audio.audiobook import Audiobook
+from palace_tools.utils.datetime import seconds_to_hms
+from palace_tools.utils.typer import run_typer_app_as_main
 
 app = typer.Typer()
 

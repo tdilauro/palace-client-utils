@@ -3,9 +3,9 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from client_utils.constants import PATRON_BOOKSHELF_REL, PATRON_PROFILE_REL
-from client_utils.models.api.opds2 import OPDS2Link, match_links
-from client_utils.models.api.util import ApiBaseModel
+from palace_tools.constants import PATRON_BOOKSHELF_REL, PATRON_PROFILE_REL
+from palace_tools.models.api.opds2 import OPDS2Link, match_links
+from palace_tools.models.api.util import ApiBaseModel
 
 
 class Labels(ApiBaseModel):

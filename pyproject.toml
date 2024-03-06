@@ -6,7 +6,7 @@ requires = ["poetry-core"]
 profile = "black"
 
 [tool.mypy]
-files = ["."]
+files = ["src"]
 plugins = ["pydantic.mypy"]
 strict = true
 
@@ -25,11 +25,11 @@ module = [
 
 [tool.poetry]
 authors = ["The Palace Project <info@thepalaceproject.org>"]
-description = "Palace Client Utilities"
+description = "Palace Tools"
 homepage = "https://thepalaceproject.org"
 license = "Apache-2.0"
-name = "palace-client-utils"
-packages = [{include = "client_utils"}]
+name = "palace-tools"
+packages = [{include = "palace_tools", from = "src"}]
 readme = "README.md"
 version = "0"
 
@@ -53,11 +53,11 @@ mypy = "^1.8.0"
 types-pytz = "^2024.1.0.20240203"
 
 [tool.poetry.scripts]
-audiobook-manifest-summary = "client_utils.cli.summarize_rwpm_audio_manifest:main"
-fetch-lcp-audiobook-manifest = "client_utils.cli.download_lcp_manifest:main"
-palace-terminal = "client_utils.cli.palace_terminal:main"
-patron-bookshelf = "client_utils.cli.patron_bookshelf:main"
-validate-audiobook-manifests = "client_utils.cli.validate_manifests:main"
+audiobook-manifest-summary = "palace_tools.cli.summarize_rwpm_audio_manifest:main"
+fetch-lcp-audiobook-manifest = "palace_tools.cli.download_lcp_manifest:main"
+palace-terminal = "palace_tools.cli.palace_terminal:main"
+patron-bookshelf = "palace_tools.cli.patron_bookshelf:main"
+validate-audiobook-manifests = "palace_tools.cli.validate_manifests:main"
 
 [tool.tomlsort]
 ignore_case = true

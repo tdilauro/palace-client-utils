@@ -7,9 +7,9 @@ from pathlib import Path
 
 import typer
 
-from client_utils.models.internal.rwpm_audio.audiobook import Audiobook
-from client_utils.utils.datetime import seconds_to_hms
-from client_utils.utils.typer import run_typer_app_as_main
+from palace_tools.models.internal.rwpm_audio.audiobook import Audiobook
+from palace_tools.utils.datetime import seconds_to_hms
+from palace_tools.utils.typer import run_typer_app_as_main
 
 app = typer.Typer()
 

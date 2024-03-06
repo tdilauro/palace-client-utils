@@ -3,13 +3,13 @@ from typing import Any, TypeVar
 
 from pydantic import Field
 
-from client_utils.constants import (
+from palace_tools.constants import (
     OPDS_ACQ_OPEN_ACCESS_REL,
     OPDS_ACQ_STANDARD_REL,
     OPDS_REVOKE_REL,
 )
-from client_utils.models.api.util import ApiBaseModel
-from client_utils.utils.misc import ensure_list
+from palace_tools.models.api.util import ApiBaseModel
+from palace_tools.utils.misc import ensure_list
 
 """
 https://drafts.opds.io/opds-2.0.html
