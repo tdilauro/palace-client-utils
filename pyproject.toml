@@ -8,10 +8,14 @@ profile = "black"
 [tool.mypy]
 files = ["."]
 plugins = ["pydantic.mypy"]
-warn_redundant_casts = true
-warn_unreachable = true
-warn_unused_configs = true
-warn_unused_ignores = true
+strict = true
+
+[[tool.mypy.overrides]]
+disallow_untyped_defs = false
+module = [
+    "client_utils.utils.*",
+    "client_utils.utils.http.streaming",
+]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true

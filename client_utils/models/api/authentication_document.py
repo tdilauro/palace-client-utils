@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from typing import Any
 
 from client_utils.constants import PATRON_BOOKSHELF_REL, PATRON_PROFILE_REL
 from client_utils.models.api.opds2 import OPDS2Link, match_links
@@ -61,7 +62,7 @@ class AuthenticationDocument(ApiBaseModel):
     authentication: list[AuthenticationMechanism]
     features: Features
     links: list[OPDS2Link]
-    announcements: list
+    announcements: list[Any]
     service_description: str
     public_key: PublicKey
     # color_scheme: str

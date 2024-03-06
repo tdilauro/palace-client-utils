@@ -1,5 +1,5 @@
 from collections.abc import Callable, Sequence
-from typing import Any, BinaryIO, ContextManager
+from typing import Any, BinaryIO, ContextManager, TypeVar
 
 import rich.progress
 from httpx import Response
@@ -18,7 +18,10 @@ def default_progress_bar() -> rich.progress.Progress:
     )
 
 
-def _to_list(value) -> list:
+T = TypeVar("T")
+
+
+def _to_list(value: Sequence[T] | T | None) -> list[T]:
     """Ensure that we end up with our own copy as a list.
 
     :param value: The value from which we'll create our list.
@@ -45,8 +48,8 @@ async def streaming_fetch(
     | Sequence[Callable[[int], Any]]
     | None = None,
     http_client: HTTPXAsyncClient | None = None,
-    raise_for_status=False,
-):
+    raise_for_status: bool = False,
+) -> Response:
     async with HTTPXAsyncClient.with_existing_client(http_client) as client:
         async with client.stream("GET", url=url) as response:
             if raise_for_status:
@@ -78,9 +81,9 @@ async def streaming_fetch_with_progress(
     total_setters: Callable[[int], Any] | list[Callable[[int], Any]] | None = None,
     progress_updaters: Callable[[int], Any] | list[Callable[[int], Any]] | None = None,
     http_client: HTTPXAsyncClient | None = None,
-    raise_for_status=False,
+    raise_for_status: bool = False,
 ) -> Response:
-    _progress_bar: ContextManager | None = None
+    _progress_bar: ContextManager[rich.progress.Progress] | None = None
     _task_label: str | None = None
     if isinstance(progress_bar, rich.progress.Progress):
         _progress_bar = progress_bar

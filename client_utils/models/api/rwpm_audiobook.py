@@ -35,7 +35,7 @@ class ToCEntry(BaseModel):
                 yield from child.toc_in_playback_order()
 
     @classmethod
-    def from_track(cls, track: AudioTrack, default_title="Track") -> Self:
+    def from_track(cls, track: AudioTrack, default_title: str = "Track") -> Self:
         """Create a ToCEntry from an AudioTrack."""
         toc_href = f"{track.href}#t=0"
         toc_title = track.title or default_title
@@ -89,7 +89,7 @@ class Manifest(BaseModel):
         return self
 
     @cached_property
-    def effective_toc(self):
+    def effective_toc(self) -> Sequence[ToCEntry]:
         return self.toc or [
             ToCEntry.from_track(track=track, default_title=f"Track {n}")
             for n, track in enumerate(self.reading_order, start=1)

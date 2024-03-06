@@ -41,7 +41,9 @@ class PatronAuthorization:
 class AuthenticatedPatron(PatronAuthorization):
     authentication_document: AuthenticationDocument
 
-    async def patron_profile_document(self, http_client=None):
+    async def patron_profile_document(
+        self, http_client: HTTPXAsyncClient | None = None
+    ) -> PatronProfileDocument:
         [patron_profile_link] = self.authentication_document.patron_profile_links
         headers = dict(self.token.as_http_headers)
         async with HTTPXAsyncClient.with_existing_client(
@@ -52,7 +54,9 @@ class AuthenticatedPatron(PatronAuthorization):
             ).json()
         return PatronProfileDocument.model_validate(profile)
 
-    async def patron_bookshelf(self, http_client=None):
+    async def patron_bookshelf(
+        self, http_client: HTTPXAsyncClient | None = None
+    ) -> OPDS2Feed:
         [patron_bookshelf_link] = self.authentication_document.patron_bookshelf_links
         headers = dict(self.token.as_http_headers) | {"Accept": OPDS_2_TYPE}
         async with HTTPXAsyncClient.with_existing_client(
@@ -74,7 +78,7 @@ async def authenticate(
     opds_server: str | None = None,
     allow_hidden_libraries: bool = False,
     http_client: HTTPXAsyncClient | None = None,
-):
+) -> AuthenticatedPatron:
     """Login as a patron."""
     async with HTTPXAsyncClient.with_existing_client(
         existing_client=http_client
