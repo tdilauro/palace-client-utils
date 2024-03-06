@@ -17,6 +17,11 @@ manifest conforming to the [Audiobook Profile](https://github.com/readium/webpub
     - Print a patron's bookshelf as either a summary or in full as JSON.
 - `validate-audiobook-manifests`
     - Validate a directory of RWPM audiobook manifests printing any errors found.
+- `palace-terminal`
+    - A toy terminal based media player that can be used to play audiobooks from
+      a local directory containing audiobook manifests and their associated media files.
+    - Note: This application uses `python-vlc` which requires VLC to be installed on
+      the system. The VLC installation can be found [here](https://www.videolan.org/vlc/).
 
 ### Library Support
 

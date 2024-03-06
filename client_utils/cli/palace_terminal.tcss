@@ -1,0 +1,26 @@
+Center {
+    layout: horizontal;
+}
+
+.footer {
+    padding: 0 2 0 2;
+    width: 1fr;
+}
+
+.footer > * {
+    margin: 0 4 0 4;
+}
+
+#toc {
+    width: 1fr;
+    height: 100%;
+}
+
+#segments {
+    width: 1fr;
+    height: 100%;
+}
+
+DataTable {
+    height: 100%;
+}
