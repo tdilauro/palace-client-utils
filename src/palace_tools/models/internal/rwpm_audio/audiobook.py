@@ -30,7 +30,7 @@ class EnhancedToCEntry(ToCEntry):
     actual_duration: float = 0.0
 
     @cached_property
-    def total_duration(self):
+    def total_duration(self) -> int:
         """The duration (in seconds) of this ToCEntry and its children."""
         return sum(toc.duration for toc in self.enhanced_toc_in_playback_order)
 
@@ -64,7 +64,7 @@ class Audiobook:
         self,
         toc: Sequence[ToCEntry] | None,
         depth: int = 0,
-    ):
+    ) -> Sequence[EnhancedToCEntry]:
         """Recursively generate enhanced ToC entries."""
         return (
             [
@@ -124,12 +124,12 @@ class Audiobook:
         ).audio_segments
 
     @cached_property
-    def toc_total_duration(self):
+    def toc_total_duration(self) -> int:
         """The duration (in seconds) of this ToCEntry and its children."""
         return sum(toc.duration for toc in self.enhanced_toc_in_playback_order)
 
     @cached_property
-    def toc_actual_total_duration(self):
+    def toc_actual_total_duration(self) -> float:
         """The duration (in seconds) of this ToCEntry and its children."""
         return sum(toc.actual_duration for toc in self.enhanced_toc_in_playback_order)
 
@@ -141,6 +141,6 @@ class Audiobook:
             # Try to load the track
             track_file = directory_path / track.href
             if track_file.is_file():
-                track.actual_duration = MP3(track_file).info.length  # type: ignore[attr-defined]
+                track.actual_duration = MP3(track_file).info.length
 
         return cls(manifest=manifest)

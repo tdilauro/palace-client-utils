@@ -431,7 +431,7 @@ class PalaceMediaPlayer:
         )
 
 
-class MediaPlayerUi(App):
+class MediaPlayerUi(App[None]):
     TITLE = "PALACE - Terminal Edition"
     BINDINGS = [
         ("p", "play", "Play Media"),
@@ -601,7 +601,7 @@ class MediaPlayerUi(App):
             log(traceback.format_exc())
 
     @staticmethod
-    def set_playing_row(table: DataTable, key: str) -> None:
+    def set_playing_row(table: DataTable[str], key: str) -> None:
         for row_key in table.rows.keys():
             if row_key.value == key:
                 updated_str = "▶️"

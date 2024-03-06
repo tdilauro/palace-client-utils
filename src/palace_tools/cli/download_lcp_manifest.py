@@ -66,8 +66,8 @@ async def process_command(
     manifest_file: Path | str | int,
     username: str,
     password: str | None,
-    manifest_member_name="manifest.json",
-    pretty_print=False,
+    manifest_member_name: str = "manifest.json",
+    pretty_print: bool = False,
 ) -> None:
     client_headers = {"User-Agent": "Palace"}
     token: BaseAuthorizationToken = BasicAuthToken.from_username_and_password(

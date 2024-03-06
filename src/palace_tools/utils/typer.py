@@ -8,7 +8,7 @@ from typing import Any
 import typer
 
 
-def run_typer_app_as_main(app, *args, **kwargs) -> Any | None:
+def run_typer_app_as_main(app: typer.Typer, *args: Any, **kwargs: Any) -> Any | None:
     """Run a typer app as the main function.
 
     Catch any uncaught exceptions and print them to stderr.

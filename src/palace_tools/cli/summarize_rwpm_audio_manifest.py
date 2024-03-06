@@ -46,7 +46,7 @@ def format_delta(delta: int | float, delta_suffix: str | None = None) -> str:
 def text_with_time_delta(
     text: str,
     delta_secs: int | float,
-    delta_label="duration",
+    delta_label: str = "duration",
     delta_suffix: str | None = None,
     second_delta: int | float | None = None,
     second_delta_suffix: str | None = None,

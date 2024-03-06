@@ -19,7 +19,7 @@ class AudioSegment:
     duration: int = field(init=False)
     actual_duration: float = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.duration = self.end - self.start
         self.actual_duration = self.end_actual - self.start
 

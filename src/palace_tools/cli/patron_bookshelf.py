@@ -6,6 +6,7 @@ import json
 import typer
 
 from palace_tools.constants import DEFAULT_REGISTRY_URL
+from palace_tools.models.api.opds2 import OPDS2Feed
 from palace_tools.models.internal.bookshelf import print_bookshelf_summary
 from palace_tools.roles.patron import authenticate
 from palace_tools.utils.http.async_client import HTTPXAsyncClient
@@ -14,7 +15,7 @@ from palace_tools.utils.typer import run_typer_app_as_main
 app = typer.Typer(rich_markup_mode="rich")
 
 
-def main():
+def main() -> None:
     run_typer_app_as_main(app)
 
 
@@ -78,7 +79,7 @@ def patron_bookshelf(
         help="Output bookshelf as JSON.",
         rich_help_panel="Output",
     ),
-):
+) -> None:
     bookshelf = asyncio.run(
         fetch_bookshelf(
             username=username,
@@ -105,7 +106,7 @@ async def fetch_bookshelf(
     opds_server: str | None = None,
     auth_doc_url: str | None = None,
     allow_hidden_libraries: bool = False,
-):
+) -> OPDS2Feed:
     async with HTTPXAsyncClient() as client:
         patron = await authenticate(
             username=username,

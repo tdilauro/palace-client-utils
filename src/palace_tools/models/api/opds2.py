@@ -33,7 +33,7 @@ class OPDS2Link(ApiBaseModel):
     templated: bool = False
 
     @property
-    def is_acquisition(self):
+    def is_acquisition(self) -> bool:
         """Is this an acquisition link?"""
         return any(
             rel in [OPDS_ACQ_STANDARD_REL, OPDS_ACQ_OPEN_ACCESS_REL]
@@ -41,18 +41,18 @@ class OPDS2Link(ApiBaseModel):
         )
 
     @property
-    def has_indirect_acquisition(self):
+    def has_indirect_acquisition(self) -> bool:
         """Does link have one or more indirect acquisition links?"""
         return bool(self.indirect_acquisition_links)
 
     @property
     def indirect_acquisition_links(self) -> Sequence[Mapping[str, Any]]:
         """Indirect acquisition link, if any."""
-        return vars(self).get("properties", {}).get("indirectAcquisition", [])
+        return vars(self).get("properties", {}).get("indirectAcquisition", [])  # type: ignore[no-any-return]
 
 
 class OPDS2(ApiBaseModel):
-    catalogs: list = []
+    catalogs: list[Any] = []
     links: list[OPDS2Link] = []
     metadata: Mapping[str, Any]
 
@@ -116,14 +116,14 @@ class Publication(ApiBaseModel):
     images: list[Image] = []
 
     @property
-    def acquisition_links(self):
+    def acquisition_links(self) -> list[OPDS2Link]:
         return match_links(
             self.links,
             lambda link: link.rel in [OPDS_ACQ_STANDARD_REL, OPDS_ACQ_OPEN_ACCESS_REL],
         )
 
     @property
-    def revoke_links(self):
+    def revoke_links(self) -> list[OPDS2Link]:
         return match_links(self.links, lambda link: link.rel == OPDS_REVOKE_REL)
 
     @property
@@ -138,10 +138,10 @@ class FeedMetadata(ApiBaseModel):
 
 class OPDS2Feed(ApiBaseModel):
     publications: list[Publication] = []
-    catalogs: list = []
+    catalogs: list[Any] = []
     links: list[OPDS2Link] = []
     metadata: Mapping[str, Any]
-    facets: list
+    facets: list[Any]
 
 
 L = TypeVar("L", bound=Mapping[str, str] | OPDS2Link)
