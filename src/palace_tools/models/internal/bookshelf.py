@@ -1,4 +1,4 @@
-from client_utils.models.api.opds2 import OPDS2Feed
+from palace_tools.models.api.opds2 import OPDS2Feed
 
 
 def print_bookshelf_summary(bookshelf: OPDS2Feed) -> None:

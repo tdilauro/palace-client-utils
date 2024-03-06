@@ -8,8 +8,8 @@ from pathlib import Path
 
 from mutagen.mp3 import MP3
 
-from client_utils.models.api.rwpm_audiobook import Manifest, ToCEntry
-from client_utils.models.internal.rwpm_audio.audio_segment import (
+from palace_tools.models.api.rwpm_audiobook import Manifest, ToCEntry
+from palace_tools.models.internal.rwpm_audio.audio_segment import (
     AudioSegment,
     audio_segments_for_all_toc_entries,
     audio_segments_for_toc_entry,

@@ -1,7 +1,7 @@
 from pydantic import Field
 
-from client_utils.models.api.opds2 import OPDS2Link
-from client_utils.models.api.util import ApiBaseModel
+from palace_tools.models.api.opds2 import OPDS2Link
+from palace_tools.models.api.util import ApiBaseModel
 
 
 class Settings(ApiBaseModel):

@@ -4,7 +4,7 @@ from typing import Any, BinaryIO, ContextManager
 import rich.progress
 from httpx import Response
 
-from client_utils.utils.http.async_client import HTTPXAsyncClient
+from palace_tools.utils.http.async_client import HTTPXAsyncClient
 
 DEFAULT_PROGRESS_BAR_TASK_NAME = ""
 

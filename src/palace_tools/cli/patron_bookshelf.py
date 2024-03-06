@@ -5,11 +5,11 @@ import json
 
 import typer
 
-from client_utils.constants import DEFAULT_REGISTRY_URL
-from client_utils.models.internal.bookshelf import print_bookshelf_summary
-from client_utils.roles.patron import authenticate
-from client_utils.utils.http.async_client import HTTPXAsyncClient
-from client_utils.utils.typer import run_typer_app_as_main
+from palace_tools.constants import DEFAULT_REGISTRY_URL
+from palace_tools.models.internal.bookshelf import print_bookshelf_summary
+from palace_tools.roles.patron import authenticate
+from palace_tools.utils.http.async_client import HTTPXAsyncClient
+from palace_tools.utils.typer import run_typer_app_as_main
 
 app = typer.Typer(rich_markup_mode="rich")
 
