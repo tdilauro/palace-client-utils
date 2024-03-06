@@ -6,8 +6,8 @@ from collections.abc import Mapping
 from functools import cached_property
 from typing import Protocol
 
-from client_utils.models.api.util import ApiBaseModel
-from client_utils.utils.datetime import utc_now
+from palace_tools.models.api.util import ApiBaseModel
+from palace_tools.utils.datetime import utc_now
 
 if sys.version_info < (3, 11):
     from typing_extensions import Self

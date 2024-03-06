@@ -3,8 +3,8 @@ from __future__ import annotations
 from collections.abc import Generator, Iterable, Sequence
 from dataclasses import dataclass, field
 
-from client_utils.models.api.rwpm_audiobook import AudioTrack, ToCEntry
-from client_utils.utils.iteration import sliding_window
+from palace_tools.models.api.rwpm_audiobook import AudioTrack, ToCEntry
+from palace_tools.utils.iteration import sliding_window
 
 
 @dataclass

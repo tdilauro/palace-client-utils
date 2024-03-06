@@ -14,7 +14,7 @@ from textual.app import App, ComposeResult
 from textual.containers import Center, Horizontal
 from textual.widgets import DataTable, Footer, Header, Label, ProgressBar
 
-from client_utils.models.api.rwpm_audiobook import Manifest
+from palace_tools.models.api.rwpm_audiobook import Manifest
 
 
 def ms_to_hms(ms: int) -> str:

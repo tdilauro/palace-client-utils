@@ -4,22 +4,22 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import Enum
 
-from client_utils.constants import (
+from palace_tools.constants import (
     DEFAULT_AUTH_DOC_PATH_SUFFIX,
     DEFAULT_REGISTRY_URL,
     OPDS_2_TYPE,
     PATRON_AUTH_BASIC_TOKEN_TYPE,
     PATRON_AUTH_BASIC_TYPE,
 )
-from client_utils.models.api.authentication_document import (
+from palace_tools.models.api.authentication_document import (
     AuthenticationDocument,
     AuthenticationMechanism,
 )
-from client_utils.models.api.opds2 import OPDS2Feed, match_links
-from client_utils.models.api.patron_profile import PatronProfileDocument
-from client_utils.services.registry import LibraryRegistryService
-from client_utils.utils.http.async_client import HTTPXAsyncClient, validate_response
-from client_utils.utils.http.auth_token import (
+from palace_tools.models.api.opds2 import OPDS2Feed, match_links
+from palace_tools.models.api.patron_profile import PatronProfileDocument
+from palace_tools.services.registry import LibraryRegistryService
+from palace_tools.utils.http.async_client import HTTPXAsyncClient, validate_response
+from palace_tools.utils.http.auth_token import (
     AuthorizationToken,
     BasicAuthToken,
     OAuthToken,

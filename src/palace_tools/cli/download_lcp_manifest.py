@@ -10,13 +10,13 @@ from pathlib import Path
 
 import typer
 
-from client_utils.constants import LCP_AUDIOBOOK_TYPE, LCP_LICENSE_PUBLICATION_REL
-from client_utils.models.api.opds2 import match_links
-from client_utils.models.api.readium_lcp_license_v1 import LCPLicenseDocument
-from client_utils.utils.http.async_client import HTTPXAsyncClient
-from client_utils.utils.http.auth_token import BaseAuthorizationToken, BasicAuthToken
-from client_utils.utils.http.streaming import streaming_fetch_with_progress
-from client_utils.utils.typer import run_typer_app_as_main
+from palace_tools.constants import LCP_AUDIOBOOK_TYPE, LCP_LICENSE_PUBLICATION_REL
+from palace_tools.models.api.opds2 import match_links
+from palace_tools.models.api.readium_lcp_license_v1 import LCPLicenseDocument
+from palace_tools.utils.http.async_client import HTTPXAsyncClient
+from palace_tools.utils.http.auth_token import BaseAuthorizationToken, BasicAuthToken
+from palace_tools.utils.http.streaming import streaming_fetch_with_progress
+from palace_tools.utils.typer import run_typer_app_as_main
 
 STDOUT = 1
 app = typer.Typer()

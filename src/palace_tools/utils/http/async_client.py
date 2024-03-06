@@ -5,7 +5,7 @@ from contextlib import nullcontext
 
 from httpx import AsyncClient, Response
 
-from client_utils.constants import DEFAULT_USER_AGENT
+from palace_tools.constants import DEFAULT_USER_AGENT
 
 if sys.version_info < (3, 11):
     from typing_extensions import Self

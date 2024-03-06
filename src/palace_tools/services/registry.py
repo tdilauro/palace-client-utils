@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from client_utils.constants import OPDS_AUTH_DOC_REL, OPDS_AUTH_DOC_TYPE
-from client_utils.models.api.opds2 import match_links
-from client_utils.utils.http.async_client import HTTPXAsyncClient, validate_response
+from palace_tools.constants import OPDS_AUTH_DOC_REL, OPDS_AUTH_DOC_TYPE
+from palace_tools.models.api.opds2 import match_links
+from palace_tools.utils.http.async_client import HTTPXAsyncClient, validate_response
 
 
 class LibraryRegistryService:
