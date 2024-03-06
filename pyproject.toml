@@ -11,13 +11,6 @@ plugins = ["pydantic.mypy"]
 strict = true
 
 [[tool.mypy.overrides]]
-disallow_untyped_defs = false
-module = [
-    "client_utils.utils.*",
-    "client_utils.utils.http.streaming",
-]
-
-[[tool.mypy.overrides]]
 ignore_missing_imports = true
 module = [
     "vlc",
