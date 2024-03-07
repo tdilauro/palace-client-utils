@@ -45,12 +45,23 @@ class ToCEntry(BaseModel):
 ToCEntries = Sequence[ToCEntry]
 
 
+class AudioTrackEncryption(BaseModel):
+    scheme: str
+    algorithm: str
+    profile: str
+
+
+class AudioTrackProperties(BaseModel):
+    encrypted: AudioTrackEncryption | None = None
+
+
 class AudioTrack(BaseModel):
     title: str | None = None
     href: str
     content_type: str = Field(..., alias="type")
     duration: int  # in seconds
     bitrate: int | None = None
+    properties: AudioTrackProperties | None = None
 
     # Optional property, initialized after the model is created, if
     # we have the source file, this is the actual duration as read from the
