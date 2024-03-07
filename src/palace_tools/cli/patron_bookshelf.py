@@ -26,12 +26,8 @@ def main() -> None:
 )
 def patron_bookshelf(
     *,
-    username: str = typer.Argument(
-        None, help="Username to present to the OPDS server."
-    ),
-    password: str = typer.Argument(
-        None, help="Password to present to the OPDS server."
-    ),
+    username: str = typer.Option(..., "--username", "-u", help="Username or barcode."),
+    password: str = typer.Option(None, "--password", "-p", help="Password or PIN."),
     auth_doc_url: str = typer.Option(
         None,
         "--auth_doc",

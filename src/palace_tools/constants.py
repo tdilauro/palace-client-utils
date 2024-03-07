@@ -1,6 +1,6 @@
 # Some defaults
 DEFAULT_ASYNC_TIMEOUT = 30.0
-DEFAULT_AUTH_DOC_PATH_SUFFIX = "/authentication-document"
+DEFAULT_AUTH_DOC_PATH_SUFFIX = "authentication_document"
 DEFAULT_REGISTRY_URL = "https://registry.thepalaceproject.org"
 DEFAULT_USER_AGENT = "Palace"
 
