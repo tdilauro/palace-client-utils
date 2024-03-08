@@ -25,6 +25,13 @@ manifest conforming to the [Audiobook Profile](https://github.com/readium/webpub
       a local directory containing audiobook manifests and their associated media files.
     - Note: This application uses `python-vlc` which requires VLC to be installed on
       the system. The VLC installation can be found [here](https://www.videolan.org/vlc/).
+- `download-feed` - Download various feeds for local inspection.
+    - `opds2`
+        - Download an OPDS2 / OPDS2 + ODL feed.
+    - `overdrive`
+        - Download Overdrive feeds.
+    - `axis`
+        - Download B&T Axis 360 availability feed.
 
 ### Library Support
 
