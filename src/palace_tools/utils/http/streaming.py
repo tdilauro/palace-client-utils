@@ -2,7 +2,7 @@ from collections.abc import Callable, Sequence
 from typing import Any, BinaryIO, ContextManager, TypeVar
 
 import rich.progress
-from httpx import Response
+from httpx import AsyncClient, Response
 
 from palace_tools.utils.http.async_client import HTTPXAsyncClient
 
@@ -47,7 +47,7 @@ async def streaming_fetch(
     progress_updaters: Callable[[int], Any]
     | Sequence[Callable[[int], Any]]
     | None = None,
-    http_client: HTTPXAsyncClient | None = None,
+    http_client: AsyncClient | None = None,
     raise_for_status: bool = False,
 ) -> Response:
     async with HTTPXAsyncClient.with_existing_client(http_client) as client:
@@ -80,7 +80,7 @@ async def streaming_fetch_with_progress(
     task_label: str | None = None,
     total_setters: Callable[[int], Any] | list[Callable[[int], Any]] | None = None,
     progress_updaters: Callable[[int], Any] | list[Callable[[int], Any]] | None = None,
-    http_client: HTTPXAsyncClient | None = None,
+    http_client: AsyncClient | None = None,
     raise_for_status: bool = False,
 ) -> Response:
     _progress_bar: ContextManager[rich.progress.Progress] | None = None
