@@ -80,14 +80,14 @@ If you don't already have `pipx` installed, you can get installation instruction
 [here](https://github.com/pypa/pipx?tab=readme-ov-file#install-pipx).
 
 ```shell
-pipx install git+https://github.com/tdilauro/palace-client-utils.git
+pipx install git+https://github.com/ThePalaceProject/palace-tools.git
 ```
 
 or, if you wish to install a particular branch or commit, you can do something like this
 (more details about [installing from VCS here](https://github.com/pypa/pipx?tab=readme-ov-file#installing-from-source-control)):
 
 ```shell
-pipx install git+https://github.com/tdilauro/palace-client-utils.git@branch-or-commit
+pipx install git+https://github.com/ThePalaceProject/palace-tools.git@branch-or-commit
 ```
 
 If installation is successful, `pipx` will list the apps that are installed with the package.
