@@ -4,8 +4,9 @@ import json
 import math
 import sys
 from base64 import b64encode
+from collections.abc import Generator, Mapping
 from enum import Enum
-from typing import Any, TextIO, Generator, Mapping
+from typing import Any, TextIO
 
 import httpx
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
@@ -54,7 +55,9 @@ class OAuthAuth(httpx.Auth):
         ]
         if len(auth_links) != 1:
             print(f"Unable to find valid authentication link ({url})")
-            print(f"Found {len(auth_links)} authentication links. Auth document: {json.dumps(auth_document)}")
+            print(
+                f"Found {len(auth_links)} authentication links. Auth document: {json.dumps(auth_document)}"
+            )
             sys.exit(-1)
         return auth_links[0]
 
@@ -63,15 +66,27 @@ class OAuthAuth(httpx.Auth):
         userpass = ":".join((username, password))
         token = b64encode(userpass.encode()).decode()
         headers = {"Authorization": f"Basic {token}"}
-        return httpx.Request("POST", url, headers=headers, data={"grant_type": "client_credentials"})
+        return httpx.Request(
+            "POST", url, headers=headers, data={"grant_type": "client_credentials"}
+        )
 
-    def auth_flow(self, request: httpx.Request) -> Generator[httpx.Request, httpx.Response, None]:
+    def auth_flow(
+        self, request: httpx.Request
+    ) -> Generator[httpx.Request, httpx.Response, None]:
         if self.token is not None:
             request.headers["Authorization"] = f"Bearer {self.token}"
         response = yield request
-        if response.status_code == 401 and response.headers.get("Content-Type") == "application/vnd.opds.authentication.v1.0+json":
-            oauth_url = self._get_oauth_url_from_auth_document(request.url, response.json())
-            response = yield self._oauth_token_request(oauth_url, self.username, self.password)
+        if (
+            response.status_code == 401
+            and response.headers.get("Content-Type")
+            == "application/vnd.opds.authentication.v1.0+json"
+        ):
+            oauth_url = self._get_oauth_url_from_auth_document(
+                str(request.url), response.json()
+            )
+            response = yield self._oauth_token_request(
+                oauth_url, self.username, self.password
+            )
             if response.status_code != 200:
                 print(f"Error: {response.status_code}")
                 print(response.text)
@@ -99,11 +114,18 @@ def write_json(file: TextIO, data: list[dict[str, Any]]) -> None:
     file.write(json.dumps(data, indent=4))
 
 
-def fetch(url: str, username: str | None, password: str | None, auth_type: AuthType) -> list[dict[str, Any]]:
+def fetch(
+    url: str, username: str | None, password: str | None, auth_type: AuthType
+) -> list[dict[str, Any]]:
     # Create a session to fetch the documents
     client = httpx.Client()
 
-    client.headers.update({"Accept": "application/opds+json, application/json;q=0.9, */*;q=0.1", "User-Agent": "Palace"})
+    client.headers.update(
+        {
+            "Accept": "application/opds+json, application/json;q=0.9, */*;q=0.1",
+            "User-Agent": "Palace",
+        }
+    )
     client.timeout = httpx.Timeout(30.0)
 
     if username and password:
