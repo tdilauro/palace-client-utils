@@ -18,6 +18,11 @@ class AuthType(Enum):
 
 
 class OAuthAuth(httpx.Auth):
+    # Implementation of OPDS auth document OAuth client credentials flow for httpx
+    # See:
+    #   - https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes
+    #   - https://drafts.opds.io/authentication-for-opds-1.0.html
+
     requires_response_body = True
 
     def __init__(self, username: str, password: str) -> None:
