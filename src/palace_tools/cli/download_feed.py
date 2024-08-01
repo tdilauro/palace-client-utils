@@ -91,13 +91,16 @@ def download_overdrive(
 def download_opds(
     username: str = typer.Option(None, "--username", "-u", help="Username"),
     password: str = typer.Option(None, "--password", "-p", help="Password"),
+    authentication: opds.AuthType = typer.Option(
+        opds.AuthType.NONE, "--auth", "-a", help="Authentication type"
+    ),
     url: str = typer.Argument(..., help="URL of feed", metavar="URL"),
     output_file: Path = typer.Argument(
         ..., help="Output file", writable=True, file_okay=True, dir_okay=False
     ),
 ) -> None:
     """Download OPDS 2 feed."""
-    publications = opds.fetch(url, username, password)
+    publications = opds.fetch(url, username, password, authentication)
     with output_file.open("w") as file:
         write_json(file, publications)
 
