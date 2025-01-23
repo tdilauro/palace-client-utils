@@ -91,7 +91,7 @@ def download_opds(
     username: str = typer.Option(None, "--username", "-u", help="Username"),
     password: str = typer.Option(None, "--password", "-p", help="Password"),
     authentication: opds.AuthType = typer.Option(
-        opds.AuthType.NONE, "--auth", "-a", help="Authentication type"
+        opds.AuthType.NONE.value, "--auth", "-a", help="Authentication type"
     ),
     url: str = typer.Argument(..., help="URL of feed", metavar="URL"),
     output_file: Path = typer.Argument(
@@ -109,7 +109,7 @@ def download_opds1(
     username: str = typer.Option(None, "--username", "-u", help="Username"),
     password: str = typer.Option(None, "--password", "-p", help="Password"),
     authentication: opds.AuthType = typer.Option(
-        opds.AuthType.NONE, "--auth", "-a", help="Authentication type"
+        opds.AuthType.NONE.value, "--auth", "-a", help="Authentication type"
     ),
     url: str = typer.Argument(..., help="URL of feed", metavar="URL"),
     output_file: Path = typer.Argument(
